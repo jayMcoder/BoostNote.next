@@ -1,0 +1,15 @@
+version "1"
+rules
+ - base: master
+   upstream: BoostIO:master
+   mergeMethod: hardreset
+ - base: gh-pages
+   upstream: BoostIO:gh-pages
+   mergeMethod: hardreset
+ - base: mobile
+   upstream: BoostIO:mobile
+   mergeMethod: hardreset
+ - base: legacy
+   upstream: BoostIO:legacy
+   mergeMethod: hardreset
+  
