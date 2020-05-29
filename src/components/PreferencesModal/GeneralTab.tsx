@@ -10,7 +10,6 @@ import {
   usePreferences,
   GeneralThemeOptions,
   GeneralLanguageOptions,
-  GeneralNoteSortingOptions,
 } from '../../lib/preferences'
 import { useTranslation } from 'react-i18next'
 import { SelectChangeEventHandler } from '../../lib/events'
@@ -19,20 +18,25 @@ import UserInfo from './UserInfo'
 import LoginButton from '../atoms/LoginButton'
 import { useAnalytics, analyticsEvents } from '../../lib/analytics'
 import { FormCheckItem } from '../atoms/form'
+import { NoteSortingOptions } from '../../lib/sort'
+import NoteSortingOptionsFragment from '../molecules/NoteSortingOptionsFragment'
+import { useGeneralStatus } from '../../lib/generalStatus'
 
 const GeneralTab = () => {
   const { preferences, setPreferences } = usePreferences()
   const [users, { removeUser }] = useUsers()
   const { report } = useAnalytics()
+  const { checkFeature } = useGeneralStatus()
 
   const selectTheme: SelectChangeEventHandler = useCallback(
     (event) => {
       setPreferences({
         'general.theme': event.target.value as GeneralThemeOptions,
       })
+      checkFeature('changeAppTheme')
       report(analyticsEvents.colorTheme)
     },
-    [setPreferences, report]
+    [setPreferences, checkFeature, report]
   )
 
   const selectLanguage: SelectChangeEventHandler = useCallback(
@@ -47,7 +51,7 @@ const GeneralTab = () => {
   const selectNoteSorting: SelectChangeEventHandler = useCallback(
     (event) => {
       setPreferences({
-        'general.noteSorting': event.target.value as GeneralNoteSortingOptions,
+        'general.noteSorting': event.target.value as NoteSortingOptions,
       })
     },
     [setPreferences]
@@ -133,9 +137,7 @@ const GeneralTab = () => {
             value={preferences['general.noteSorting']}
             onChange={selectNoteSorting}
           >
-            <option value='date-updated'>{t('preferences.dateUpdated')}</option>
-            <option value='date-created'>{t('preferences.dateCreated')}</option>
-            <option value='title'>{t('preferences.title')}</option>
+            <NoteSortingOptionsFragment />
           </SectionSelect>
         </SectionControl>
       </Section>

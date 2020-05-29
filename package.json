@@ -1,7 +1,7 @@
 {
   "name": "boostnote.next",
   "productName": "Boost Note",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "A Polished Notes App with Github Flavored Markdown",
   "main": "app/index.js",
   "repository": {
@@ -91,14 +91,14 @@
     "rimraf": "^3.0.0",
     "style-loader": "^1.0.0",
     "terser-webpack-plugin": "^2.2.3",
-    "ts-loader": "^6.2.0",
+    "ts-loader": "^7.0.3",
     "ts-node": "^8.4.1",
-    "type-fest": "^0.7.1",
+    "type-fest": "^0.13.1",
     "typescript": "^3.8.3",
     "url-loader": "^2.1.0",
     "webpack": "^4.40.2",
     "webpack-cli": "^3.3.9",
-    "webpack-dev-server": "^3.8.1"
+    "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
     "@mdi/js": "^5.1.45",

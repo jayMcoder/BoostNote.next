@@ -11,17 +11,20 @@ import { mdiPlus, mdiHammerWrench } from '@mdi/js'
 import NavigatorButton from '../atoms/NavigatorButton'
 import Spacer from '../atoms/Spacer'
 import { usePathnameWithoutNoteId } from '../../lib/router'
+import { borderBottom } from '../../lib/styled/styleFunctions'
 
 const NavigatorContainer = styled.nav`
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: ${({ theme }) => theme.sideNavBackgroundColor};
+  background-color: ${({ theme }) => theme.navBackgroundColor};
 `
 
 const TopControl = styled.div`
   display: flex;
-  margin: 1em 0;
+  align-items: center;
+  height: 40px;
+  ${borderBottom}
 `
 
 const Empty = styled.button`
@@ -34,19 +37,20 @@ const Empty = styled.button`
   cursor: pointer;
 
   transition: color 200ms ease-in-out;
-  color: ${({ theme }) => theme.sideNavButtonColor};
+  color: ${({ theme }) => theme.navButtonColor};
   &:hover {
-    color: ${({ theme }) => theme.sideNavButtonHoverColor};
+    color: ${({ theme }) => theme.navButtonHoverColor};
   }
 
   &:active,
   .active {
-    color: ${({ theme }) => theme.sideNavButtonActiveColor};
+    color: ${({ theme }) => theme.navButtonActiveColor};
   }
 `
 
 const ScrollableContainer = styled.div`
   flex: 1;
+  padding: 10px 0;
   overflow: auto;
 `
 

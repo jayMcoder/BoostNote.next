@@ -1,26 +1,30 @@
 import React from 'react'
 import styled from '../../lib/styled'
 import Icon from './Icon'
+import { flexCenter } from '../../lib/styled/styleFunctions'
 
 const ToolbarButtonContainer = styled.button`
-  height: 32px;
+  height: 24px;
+  width: 24px;
   box-sizing: border-box;
   font-size: 18px;
   outline: none;
 
   background-color: transparent;
+  ${flexCenter}
+
   border: none;
   cursor: pointer;
 
   transition: color 200ms ease-in-out;
-  color: ${({ theme }) => theme.sideNavButtonColor};
+  color: ${({ theme }) => theme.navButtonColor};
   &:hover {
-    color: ${({ theme }) => theme.sideNavButtonHoverColor};
+    color: ${({ theme }) => theme.navButtonHoverColor};
   }
 
   &:active,
   &.active {
-    color: ${({ theme }) => theme.sideNavButtonActiveColor};
+    color: ${({ theme }) => theme.navButtonActiveColor};
   }
 `
 
@@ -30,14 +34,16 @@ interface ToolbarButtonProps {
   onClick: React.MouseEventHandler
 }
 
-const ToolbarButton = ({
-  iconPath,
-  onClick,
-  active = false,
-}: ToolbarButtonProps) => (
-  <ToolbarButtonContainer onClick={onClick} className={active ? 'active' : ''}>
-    <Icon path={iconPath} />
-  </ToolbarButtonContainer>
+const ToolbarButton = React.forwardRef(
+  ({ iconPath, onClick, active = false }: ToolbarButtonProps, ref) => (
+    <ToolbarButtonContainer
+      onClick={onClick}
+      className={active ? 'active' : ''}
+      ref={ref}
+    >
+      <Icon path={iconPath} />
+    </ToolbarButtonContainer>
+  )
 )
 
 export default ToolbarButton

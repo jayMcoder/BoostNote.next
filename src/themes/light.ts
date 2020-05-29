@@ -37,8 +37,7 @@ export const lightTheme: BaseTheme = {
 
   primaryColor: primaryColor,
   borderColor: dark12Color,
-  iconColor: dark26Color,
-  activeIconColor: dark54Color,
+
   noteListIconColor: dark26Color,
   noteListActiveIconColor: dark54Color,
   noteDetailIconColor: dark26Color,
@@ -54,17 +53,20 @@ export const lightTheme: BaseTheme = {
   scrollBarThumbColor: dark12Color,
 
   // SideBar
-  sideNavBackgroundColor: uiBackgroundColor,
-  sideNavLabelColor: uiColor,
-  sideNavButtonColor: uiDimColor,
-  sideNavButtonHoverColor: uiColor,
-  sideNavButtonActiveColor: primaryColor,
-  sideNavItemColor: uiColor,
-  sideNavItemBackgroundColor: 'transparent',
-  sideNavItemHoverBackgroundColor: uiVividBackgroundColor,
-  sideNavItemActiveColor: uiVividColor,
-  sideNavItemActiveBackgroundColor: uiVividBackgroundColor,
-  sideNavItemHoverActiveBackgroundColor: uiVivid2BackgroundColor,
+  navBackgroundColor: uiBackgroundColor,
+  navLabelColor: uiColor,
+  navButtonColor: uiDimColor,
+  navButtonHoverColor: uiColor,
+  navButtonActiveColor: primaryColor,
+  navItemColor: uiColor,
+  navItemBackgroundColor: 'transparent',
+  navItemHoverBackgroundColor: uiVividBackgroundColor,
+  navItemActiveColor: uiVividColor,
+  navItemActiveBackgroundColor: uiVividBackgroundColor,
+  navItemHoverActiveBackgroundColor: uiVivid2BackgroundColor,
+
+  // NotePage
+  noteNavEmptyItemColor: uiDimColor,
 
   // Button
   primaryButtonLabelColor: light100Color,

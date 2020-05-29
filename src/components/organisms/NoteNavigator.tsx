@@ -1,81 +1,44 @@
-import React, { useCallback, useRef, ChangeEventHandler } from 'react'
+import React, {
+  useCallback,
+  useRef,
+  ChangeEventHandler,
+  ChangeEvent,
+} from 'react'
 import NoteItem from '../molecules/NoteItem'
 import styled from '../../lib/styled'
 import {
   borderBottom,
   noteListIconColor,
-  selectTabStyle,
-  disabledUiTextColor,
-  inputStyle,
+  flexCenter,
 } from '../../lib/styled/styleFunctions'
 import { useTranslation } from 'react-i18next'
 import {
   useGlobalKeyDownHandler,
   isWithGeneralCtrlKey,
 } from '../../lib/keyboard'
-import { NoteListSortOptions } from '../pages/NotePage'
 import { osName } from '../../lib/platform'
 import Icon from '../atoms/Icon'
-import { mdiChevronDown, mdiPlus, mdiMagnify } from '@mdi/js'
+import { mdiPlus, mdiMagnify } from '@mdi/js'
 import { NoteDoc } from '../../lib/db/types'
+import { NoteSortingOptions } from '../../lib/sort'
+import NoteSortingOptionsFragment from '../molecules/NoteSortingOptionsFragment'
 
-const NoteListContainer = styled.div`
+const NoteNavigatorContainer = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
   height: 100%;
   outline: none;
-  & > ul {
-    flex: 1;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    overflow-y: auto;
-  }
-
-  .filterTab {
-    height: 25px;
-    display: flex;
-    align-items: center;
-    padding-left: 1em;
-    .filterIcon {
-      font-size: 10px;
-      margin-right: 5px;
-      z-index: 0;
-      pointer-events: none;
-
-      transition: color 200ms ease-in-out;
-      color: ${({ theme }) => theme.sideNavButtonColor};
-      &:hover {
-        color: ${({ theme }) => theme.sideNavButtonHoverColor};
-      }
-
-      &:active,
-      .active {
-        color: ${({ theme }) => theme.sideNavButtonActiveColor};
-      }
-    }
-    .input {
-      ${selectTabStyle}
-    }
-    select {
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      border: none;
-      background: transparent;
-    }
-    ${borderBottom};
-    ${noteListIconColor};
-  }
-  .empty {
-    user-select: none;
-    padding: 10px;
-    ${disabledUiTextColor};
-  }
 `
 
-const Control = styled.div`
-  height: 50px;
+const EmptyItem = styled.li`
+  user-select: none;
+  padding: 10px;
+  color: ${({ theme }) => theme.noteNavEmptyItemColor};
+`
+
+const Toolbar = styled.div`
+  height: 40px;
   display: flex;
   padding: 0 0 0 8px;
   align-items: center;
@@ -85,91 +48,120 @@ const Control = styled.div`
     width: 36px;
     height: 36px;
     font-size: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
     background-color: transparent;
     border-radius: 50%;
     border: none;
     cursor: pointer;
 
     transition: color 200ms ease-in-out;
-    color: ${({ theme }) => theme.sideNavButtonColor};
+    ${flexCenter}
+
+    color: ${({ theme }) => theme.navButtonColor};
     &:hover {
-      color: ${({ theme }) => theme.sideNavButtonHoverColor};
+      color: ${({ theme }) => theme.navButtonHoverColor};
     }
 
     &:active,
     .active {
-      color: ${({ theme }) => theme.sideNavButtonActiveColor};
-    }
-  }
-
-  .searchInput {
-    ${inputStyle}
-    flex: 1;
-    position: relative;
-    height: 32px;
-    color: ${({ theme }) => theme.sideNavButtonColor};
-    border-radius: 4px;
-    overflow: hidden;
-    &:focus {
-      box-shadow: 0 0 0 2px ${({ theme }) => theme.primaryColor};
-    }
-    .icon {
-      position: absolute;
-      top: 6px;
-      left: 10px;
-      font-size: 18px;
-      z-index: 0;
-      pointer-events: none;
-      ${noteListIconColor}
-    }
-    .input {
-      background-color: transparent;
-      position: relative;
-      width: 100%;
-      height: 30px;
-      padding-left: 35px;
-      box-sizing: border-box;
-      border: none;
-    }
-    select {
-      appearance: none;
+      color: ${({ theme }) => theme.navButtonActiveColor};
     }
   }
 `
 
-type NoteListProps = {
+const Search = styled.div`
+  background-color: ${({ theme }) => theme.inputBackground};
+  border: 1px solid ${({ theme }) => theme.borderColor};
+  border-radius: 4px;
+  color: ${({ theme }) => theme.textColor};
+  flex: 1;
+  position: relative;
+  height: 32px;
+  color: ${({ theme }) => theme.navButtonColor};
+  border-radius: 4px;
+  overflow: hidden;
+  &:focus {
+    box-shadow: 0 0 0 2px ${({ theme }) => theme.primaryColor};
+  }
+  .icon {
+    position: absolute;
+    top: 6px;
+    left: 10px;
+    font-size: 18px;
+    z-index: 0;
+    pointer-events: none;
+    ${noteListIconColor}
+  }
+  .input {
+    background-color: transparent;
+    position: relative;
+    width: 100%;
+    height: 30px;
+    padding-left: 35px;
+    box-sizing: border-box;
+    border: none;
+    &:focus {
+      box-shadow: 0 0 0 2px ${({ theme }) => theme.primaryColor};
+    }
+    &::placeholder {
+      color: ${({ theme }) => theme.uiTextColor};
+    }
+  }
+`
+
+const NoteListControl = styled.div`
+  height: 25px;
+  display: flex;
+  ${borderBottom};
+`
+
+const NoteSortingSelect = styled.select`
+  border: none;
+  flex: 1;
+  color: ${({ theme }) => theme.uiTextColor};
+  background-color: ${({ theme }) => theme.backgroundColor};
+`
+
+const NoteList = styled.ul`
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-y: auto;
+`
+
+type NoteNavigatorProps = {
   storageId: string
-  currentNoteId?: string
+  currentNote?: NoteDoc
   search: string
   notes: NoteDoc[]
+  noteSorting: NoteSortingOptions
+  setNoteSorting: (noteSorting: NoteSortingOptions) => void
   createNote?: () => Promise<void>
   setSearchInput: (input: string) => void
   navigateDown: () => void
   navigateUp: () => void
   basePathname: string
   lastCreatedNoteId: string
-  setSort: (option: NoteListSortOptions) => void
-  trashOrPurgeCurrentNote: () => void
+  trashNote: (storageId: string, noteId: string) => Promise<NoteDoc | undefined>
+  purgeNote: (storageId: string, noteId: string) => void
 }
 
-const NoteList = ({
+const NoteNavigator = ({
+  currentNote,
   notes,
+  noteSorting,
+  setNoteSorting,
   createNote,
   storageId,
   basePathname,
   search,
-  currentNoteId,
   setSearchInput,
   navigateDown,
   navigateUp,
   lastCreatedNoteId,
-  setSort,
-  trashOrPurgeCurrentNote,
-}: NoteListProps) => {
+  trashNote,
+  purgeNote,
+}: NoteNavigatorProps) => {
   const { t } = useTranslation()
   const updateSearchInput: ChangeEventHandler<HTMLInputElement> = useCallback(
     (event) => {
@@ -211,6 +203,19 @@ const NoteList = ({
     listRef.current!.focus()
   }, [])
 
+  const trashOrPurgeCurrentNote = useCallback(() => {
+    if (currentNote == null) {
+      return
+    }
+
+    if (!currentNote.trashed) {
+      trashNote(storageId, currentNote._id)
+    } else {
+      purgeNote(storageId, currentNote._id)
+    }
+    focusList()
+  }, [trashNote, purgeNote, currentNote, storageId, focusList])
+
   const handleListKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
       switch (event.key) {
@@ -230,9 +235,9 @@ const NoteList = ({
   )
 
   return (
-    <NoteListContainer>
-      <Control className='control'>
-        <div className='searchInput'>
+    <NoteNavigatorContainer>
+      <Toolbar>
+        <Search>
           <input
             ref={searchRef}
             className='input'
@@ -241,27 +246,27 @@ const NoteList = ({
             placeholder={t('note.search')}
           />
           <Icon className='icon' path={mdiMagnify} />
-        </div>
+        </Search>
         {storageId != null && createNote != null && (
           <button className='newNoteButton' onClick={createNote}>
             <Icon className='icon' path={mdiPlus} />
           </button>
         )}
-      </Control>
-      <div className='filterTab'>
-        <Icon path={mdiChevronDown} />
-        <select
-          className='input'
-          onChange={(e) => setSort(e.target.value as NoteListSortOptions)}
+      </Toolbar>
+      <NoteListControl>
+        <NoteSortingSelect
+          value={noteSorting}
+          onChange={(event: ChangeEvent<HTMLSelectElement>) => {
+            setNoteSorting(event.target.value as NoteSortingOptions)
+          }}
         >
-          <option value='updatedAt'>Updated</option>
-          <option value='createdAt'>Created</option>
-          <option value='title'>Title</option>
-        </select>
-      </div>
-      <ul tabIndex={0} ref={listRef} onKeyDown={handleListKeyDown}>
+          <NoteSortingOptionsFragment />
+        </NoteSortingSelect>
+      </NoteListControl>
+      <NoteList tabIndex={0} ref={listRef} onKeyDown={handleListKeyDown}>
         {notes.map((note) => {
-          const noteIsCurrentNote = note._id === currentNoteId
+          const noteIsCurrentNote = note._id === currentNote?._id
+
           return (
             <li key={note._id}>
               <NoteItem
@@ -278,14 +283,14 @@ const NoteList = ({
         })}
         {notes.length === 0 ? (
           search.trim() === '' ? (
-            <li className='empty'>{t('note.nothing')}</li>
+            <EmptyItem>{t('note.nothing')}</EmptyItem>
           ) : (
-            <li className='empty'>{t('note.nothingMessage')}</li>
+            <EmptyItem>{t('note.nothingMessage')}</EmptyItem>
           )
         ) : null}
-      </ul>
-    </NoteListContainer>
+      </NoteList>
+    </NoteNavigatorContainer>
   )
 }
 
-export default NoteList
+export default NoteNavigator

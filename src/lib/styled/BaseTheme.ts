@@ -8,8 +8,7 @@ export interface BaseTheme {
 
   primaryColor: string
   borderColor: string
-  iconColor: string
-  activeIconColor: string
+
   noteListIconColor: string
   noteListActiveIconColor: string
   noteDetailIconColor: string
@@ -24,17 +23,20 @@ export interface BaseTheme {
   scrollBarThumbColor: string
 
   // SideBar
-  sideNavBackgroundColor: string
-  sideNavLabelColor: string
-  sideNavButtonColor: string
-  sideNavButtonHoverColor: string
-  sideNavButtonActiveColor: string
-  sideNavItemColor: string
-  sideNavItemBackgroundColor: string
-  sideNavItemHoverBackgroundColor: string
-  sideNavItemActiveColor: string
-  sideNavItemActiveBackgroundColor: string
-  sideNavItemHoverActiveBackgroundColor: string
+  navBackgroundColor: string
+  navLabelColor: string
+  navButtonColor: string
+  navButtonHoverColor: string
+  navButtonActiveColor: string
+  navItemColor: string
+  navItemBackgroundColor: string
+  navItemHoverBackgroundColor: string
+  navItemActiveColor: string
+  navItemActiveBackgroundColor: string
+  navItemHoverActiveBackgroundColor: string
+
+  // NotePage
+  noteNavEmptyItemColor: string
 
   // Button
   primaryButtonLabelColor: string

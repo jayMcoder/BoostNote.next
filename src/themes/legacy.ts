@@ -11,8 +11,6 @@ const dark12Color = 'rgba(0,0,0,0.12)'
 const dark100Color = '#000'
 
 const light100Color = '#FFF'
-const light70Color = 'rgba(255,255,255,0.7)'
-const light30Color = 'rgba(255,255,255,0.3)'
 const light12Color = 'rgba(255,255,255,0.12)'
 
 export const legacyTheme: BaseTheme = {
@@ -33,8 +31,6 @@ export const legacyTheme: BaseTheme = {
 
   primaryColor: primaryColor,
   borderColor: dark12Color,
-  iconColor: light30Color,
-  activeIconColor: light70Color,
   noteListIconColor: dark26Color,
   noteListActiveIconColor: dark54Color,
   noteDetailIconColor: dark26Color,
@@ -50,17 +46,20 @@ export const legacyTheme: BaseTheme = {
   scrollBarThumbColor: dark12Color,
 
   // SideBar
-  sideNavBackgroundColor: '#2c2c2c',
-  sideNavLabelColor: '#bbb',
-  sideNavButtonColor: '#999',
-  sideNavButtonHoverColor: '#bbb',
-  sideNavButtonActiveColor: primaryColor,
-  sideNavItemColor: '#bbb',
-  sideNavItemBackgroundColor: 'transparent',
-  sideNavItemHoverBackgroundColor: '#444',
-  sideNavItemActiveColor: '#eee',
-  sideNavItemActiveBackgroundColor: '#444',
-  sideNavItemHoverActiveBackgroundColor: '#555',
+  navBackgroundColor: '#2c2c2c',
+  navLabelColor: '#bbb',
+  navButtonColor: '#999',
+  navButtonHoverColor: '#bbb',
+  navButtonActiveColor: primaryColor,
+  navItemColor: '#bbb',
+  navItemBackgroundColor: 'transparent',
+  navItemHoverBackgroundColor: '#444',
+  navItemActiveColor: '#eee',
+  navItemActiveBackgroundColor: '#444',
+  navItemHoverActiveBackgroundColor: '#555',
+
+  // NotePage
+  noteNavEmptyItemColor: '#999',
 
   // Button
   primaryButtonLabelColor: light100Color,
